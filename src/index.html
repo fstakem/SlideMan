@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>OnSlyde - The Presentation Management Software</title>
+		<script src="jquery.js"></script>
+		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+		
+		<!-- Interaction -->
+		<!-- **************************************************************** -->
+		<script type="text/javascript">
+		
+			// Button Handlers
+			// --------------------------------------------------------------
+			$(document).ready(function()
+			{
+				// Declare variables
+				//var slide_controller = new SlideController();
+				
+				// Create SocketIO instance, connect
+				var socket = io.connect('http://localhost:8080');
+				
+				// Add a connect listener
+				socket.on('connect',function() 
+				{
+					console.log('Client has connected to the server!');
+				});
+				
+				// Add a connect listener
+				socket.on('message',function() 
+				{
+					console.log('Test');
+					//console.log('Received a message from the server!',data);
+				});
+				
+				// Add a disconnect listener
+				socket.on('disconnect',function() 
+				{
+					console.log('The client has disconnected!');
+				});
+				
+				// Sends a message to the server via sockets
+				function sendMessageToServer(message) 
+				{
+					socket.send(message);
+				}
+
+			
+				// Feedback buttons
+			    $('#feedback_button_1').click(function()
+			    {
+			        console.log('feedback_button_1');
+			        var feedback_option = "1";
+			        for (var i=0; i < document.feedback_form.feedback_radio.length; i++)
+				   	{
+				   		if (document.feedback_form.feedback_radio[i].checked)
+				      	{
+				      		feedback_option = document.feedback_form.feedback_radio[i].value;
+				      	}
+				   	}
+				   	
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "feedback",
+			        					"message_function": "feedback_option",
+			        					"message_body":
+			        					{
+			        						"value": feedback_option
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    
+			    // Slide control buttons
+			    $('#start_button').click(function()
+			    {
+			        console.log('start_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "start_presentation",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#restart_button').click(function()
+			    {
+			        console.log('restart_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "restart_presentation",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#first_slide_button').click(function()
+			    {
+			        console.log('first_slide_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "get_first_slide",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#last_slide_button').click(function()
+			    {
+			        console.log('last_slide_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "get_last_slide",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#next_slide_button').click(function()
+			    {
+			        console.log('next_slide_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "get_next_slide",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#previous_slide_button').click(function()
+			    {
+			        console.log('previous_slide_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "get_previous_slide",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#current_slide_button').click(function()
+			    {
+			        console.log('current_slide_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "get_current_slide",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    // Branch control buttons
+			    $('#choose_branch_button').click(function()
+			    {
+			    	console.log('choose_branch_button');
+    				var branch = document.getElementById('branch_selection').value  
+    
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "choose_branch",
+			        					"message_body":
+			        					{
+			        						"value": branch
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			    
+			    $('#return_to_branch_button').click(function()
+			    {
+			        console.log('return_to_branch_button');
+			        var message = 	{
+			        					"protocol": "onslyde",
+			        					"version": "1",
+			        					"seq_number": "1",
+			        					"message_type": "state_control",
+			        					"message_function": "return_to_branch",
+			        					"message_body":
+			        					{
+			        						"example": "TEST"
+			        					}
+								    };
+			        socket.send(JSON.stringify(message));
+			    });
+			
+			});
+			
+		</script>
+		
+	</head>
+
+	<body>
+		<h2>Presentation State Machine</h2>
+		
+		<!-- Response -->
+		<!-- **************************************************************** -->
+		<label>Response</label>
+		<br />
+		<textarea rows="4" cols="120" readonly="readonly">This is the response.</textarea>
+		<br />
+		<br />
+		
+		<!-- Current State -->
+		<!-- **************************************************************** -->
+		<label>Current State</label>
+		<br />
+		<textarea rows="4" cols="120" readonly="readonly">This is the current state.</textarea>
+		<br />
+		<br />
+		
+		<!-- Feedback -->
+		<!-- **************************************************************** -->
+		<label>Feedback</label>
+		<br />
+		<form name="feedback_form">
+		<input type="radio" name="feedback_radio" value="Option 1" checked> Option 1<br />
+		<input type="radio" name="feedback_radio" value="Option 2"> Option 2<br />
+		<button type="button" id="feedback_button_1">Submit Feedback</button>
+		</form>
+		<br />
+		<br />
+		
+		
+		<!-- State Controller -->
+		<!-- **************************************************************** -->
+		<label>State Controller</label>
+		<br />
+		
+		<button type="button" id="start_button">Start</button>
+		<button type="button" id="restart_button">Restart</button>
+		<button type="button" id="first_slide_button">First Slide</button>
+		<button type="button" id="last_slide_button">Last Slide</button>
+		<button type="button" id="next_slide_button">Next Slide</button>
+		<button type="button" id="previous_slide_button">Previous Slide</button>
+		<button type="button" id="current_slide_button">Current Slide</button>
+		<br />
+		<br />
+		<label>Choose Branch</label>
+		<br />
+		<select id="branch_selection">
+		  <option value="0" >0</option>
+		  <option value="1" >1</option>
+		  <option value="2" >2</option>
+		</select>
+		<br />
+		<button type="button" id="choose_branch_button">Choose Branch</button>
+		<button type="button" id="return_to_branch_button">Return to Branch</button>
+		<br />
+		<br />
+		
+	</body>
+</html>
